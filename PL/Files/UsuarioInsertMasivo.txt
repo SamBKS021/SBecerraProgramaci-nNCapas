@@ -1,0 +1,5 @@
+UserName|Nombre|ApellidoPaterno|ApellidoMaterno|Email|Password|Sexo|Telefono|Celular|FechaNacimiento|CURP|IdRol|Calle|NumeroInterior|NumeroExterior|IdColonia
+BrendaUser|Brenda|Martínez|Hernández|brendaMH@gmail.com|contraseñaSegura1|F|5611111111|5521111111|1998-03-15|CURPBREN|3|Principal|101|23|102
+CarlosUser|Carlos|Ramírez|Gómez|carlosRG@gmail.com|claveCarlos12|M|5612222222|5522222222|1995-11-02|CURPCARL|1|Juárez|A|5|78
+DianaUser|Diana|López|Pérez|dianaLP@gmail.com|diana1234|F|5613333333|5523333333|2000-05-10|CURPDIAN|2|Zaragoza|22|44|98
+EduardoUser|Eduardo|Sánchez|Domínguez|eduardoSD@gmail.com|passEduardo!|M|5614444444|5524444444|1993-09-25|CURPEDUA|1|Reforma|10|30|55

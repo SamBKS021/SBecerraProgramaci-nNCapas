@@ -1,0 +1,658 @@
+﻿@model ML.Usuario
+
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+    body {
+        background-image: url('../../Content/Imagenes/wallpaper.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: #000f;
+    }
+
+    .hrLinea {
+        vertical-align: middle;
+        width: 45%;
+        display: inline-block;
+        border: 5px solid white;
+    }
+</style>
+@using (Html.BeginForm("Form", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="container w-75 shadow-lg p-4 mt-5 rounded text-white" style="background-color: #3e2723 ">
+
+        <div class="text-center mb-3">
+            <h1 class="font-weight-bold">Formulario de Registro</h1>
+        </div>
+
+        <div class="row" style="fit-content">
+            <div>
+                <hr class="hrLinea"> USUARIO <hr class="hrLinea">
+            </div>
+
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                @Html.HiddenFor(model => model.IdUsuario)
+                @Html.HiddenFor(model => model.Imagen)
+
+                <i class="bi bi-person"></i>
+                @Html.LabelFor(model => model.UserName, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.UserName, new { id = "UserName", @class = "form-control", placeholder = "Ingrese su usuario", onblur = "validarUserName(event,this, 'errorUserName')" })
+                <span id="errorUserName" class="text-danger d-none">Caracter no permitido</span>
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.UserName)
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                <i class="bi bi-person-square"></i>
+                @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Nombre, new { id = "Nombre", @class = "form-control", placeholder = "Ingrese su nombre", @onkeypress = "soloTexto(event, this, 'errorNombre')" })
+                <span id="errorNombre" class="text-danger d-none">Caracter no permitido, solo letras</span>
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.Nombre)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                <i class="bi bi-emoji-laughing-fill"></i>
+                @Html.LabelFor(model => model.ApellidoPaterno, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.ApellidoPaterno, new { id = "ApellidoPaterno", @class = "form-control", placeholder = "Ingrese su apellido paterno", @onkeypress = "soloTexto(event, this, 'errorApellidoPaterno')" })
+                <span id="errorApellidoPaterno" class="text-danger d-none">Caracter no permitido, solo letras</span>
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.ApellidoPaterno)
+                </div>
+            </div>
+            <div class="col-lg-4 col-lg-offset-4 mx-auto">
+                <i class="bi bi-emoji-laughing"></i>
+                @Html.LabelFor(model => model.ApellidoMaterno, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.ApellidoMaterno, new { id = "ApellidoMaterno", @class = "form-control", placeholder = "Ingrese su apellido materno", @onkeypress = "soloTexto(event, this, 'errorApellidoMaterno')" })
+                <span id="errorApellidoMaterno" class="text-danger d-none">Caracter no permitido, solo letras</span>
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.ApellidoMaterno)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                <i class="bi bi-envelope"></i>
+                @Html.LabelFor(model => model.Email, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Email, new { id = "Email", @class = "form-control", placeholder = "ejemplo@correo.com", type = "email", onblur = "validateEmail(event, this, 'errorEmail')" })
+                <span id="errorEmail" class="text-danger d-none">Correo no valido</span>
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+
+            </div>
+            <div class="col-lg-4 col-lg-offset-4 mx-auto">
+                <i class="bi bi-lock-fill"></i>
+                @Html.LabelFor(model => model.Password, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Password, new { id = "Password", @class = "form-control", type = "password", placeholder = "Ingrese su contraseña", onblur = "validarPassword(this, 'errorPassword')" })
+                <span id="errorPassword" class="text-danger d-none">Contraseña no valida, 8 caracteres, mayus/minus</span>
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.Password)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                <i class="bi bi-gender-ambiguous"></i>
+                @Html.LabelFor(model => model.Sexo, new { @class = "form-label" })
+                <br />
+                @Html.Label("Hombre", new { @class = "form-label" })
+                @Html.RadioButtonFor(modelo => modelo.Sexo, "M ", new { id = "Sexo", @class = "form-check-input" })
+                @Html.Label("Mujer", new { @class = "form-label" })
+                @Html.RadioButtonFor(modelo => modelo.Sexo, "F ", new { id = "Sexo", @class = "form-check-input" })
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.Sexo)
+                </div>
+            </div>
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                <i class="bi bi-telephone"></i>
+                @Html.LabelFor(model => model.Telefono, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Telefono, new { id = "Telefono", @class = "form-control", placeholder = "Ingrese su teléfono", onkeypress = "soloNumeros(event,this, 'errorTelefono')", onblur = "validarTelefono(event,this, 'errorTelefono')" })
+                <span id="errorTelefono" class="text-danger d-none">Caracter no permitido, solo números</span>
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.Telefono)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                <i class="bi bi-phone-fill"></i>
+                @Html.LabelFor(model => model.Celular, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Celular, new { id = "Celular", @class = "form-control", placeholder = "Ingrese su celular", onkeypress = " soloNumeros(event, this, 'errorCelular')", onblur = "validarTelefono(event, this, 'errorCelular')" })
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.Celular)
+                </div>
+                <span id="errorCelular" class="text-danger d-none">Caracter no permitido, solo números</span>
+            </div>
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                <i class="bi bi-calendar2-date-fill"></i>
+                @Html.LabelFor(model => model.FechaNacimiento, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.FechaNacimiento, new { id = "FechaNacimiento", @class = "form-control", onchange = "validarFecha(this, 'errorFechaNacimiento')" })
+                <span id="errorFechaNacimiento" class="text-danger d-none">Fecha no valida</span>
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.FechaNacimiento)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                <i class="bi bi-person-vcard-fill"></i>
+                @Html.LabelFor(model => model.CURP, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.CURP, new { id = "CURP", @class = "form-control", placeholder = "Ingrese su CURP", onblur = "validarCURP(this, 'errorCURP')" })
+                <span id="errorCURP" class="text-danger d-none">Formato invalido</span>
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.CURP)
+                </div>
+            </div>
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                <i class="bi bi-person-badge-fill"></i>
+                @Html.Label("Rol", new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.Rol.IdRol, new SelectList
+               (Model.Rol.Rols, "IdRol", "Nombre"), "Selecciona un rol", new { id = "Rol", @class = "form-control", onchange = "validarDDL(this, 'errorRol')" })
+                <span id="errorRol" class="text-danger d-none">Opción no valida</span>
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.Rol.IdRol)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div>
+                <hr class="hrLinea"> DIRECCION <hr class="hrLinea">
+            </div>
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                @* @Html.LabelFor(model => model.Direccion.Colonia.Municipio.Estado.IdEstado, new { @class = "form-label" })*@
+                <i class="bi bi-person-badge-fill"></i>
+                @Html.Label("Estado", new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.Direccion.Colonia.Municipio.Estado.IdEstado, new SelectList
+               (Model.Direccion.Colonia.Municipio.Estado.Estados, "IdEstado", "Nombre"), "Selecciona un estado", new { @class = "form-control", @id = "ddlEstado", @onchange = "getMunicipiosByIdEstado(), validarDDL(this, 'errorEstado')" })
+                <span id="errorEstado" class="text-danger d-none">Opción no valida</span>
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.Direccion.Colonia.Municipio.Estado.IdEstado)
+                </div>
+
+            </div>
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                @*@Html.LabelFor(model => model.Direccion.Colonia.Municipio.IdMunicipio, new { @class = "form-label" })*@
+                @if (Model.IdUsuario > 0)
+                {
+                    <i class="bi bi-map"></i>
+                    @Html.Label("Municipio", new { @class = "form-label" })
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.Municipio.IdMunicipio, new SelectList
+                   (Model.Direccion.Colonia.Municipio.Municipios, "IdMunicipio", "Nombre"), "Selecciona un municipio", new { @class = "form-control", @id = "ddlMunicipio", @onchange = "getColoniasByIdMunicipio(),  validarDDL(this, 'errorMunicipio')" })
+                    //(string.Empty, "IdMunicipio", "Nombre"), "Selecciona un municipio", new { @class = "form-control", @id = "ddlMunicipio", @onchange = "getColoniasByIdMunicipio()" })
+                    <span id="errorMunicipio" class="text-danger d-none">Opción no valida</span>
+                    <div class="text-danger">
+                        @Html.ValidationMessageFor(model => model.Direccion.Colonia.Municipio.IdMunicipio)
+                    </div>
+
+                }
+                else
+                {
+                    <i class="bi bi-map"></i>
+                    @Html.Label("Municipio", new { @class = "form-label" })
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.Municipio.IdMunicipio, new SelectList
+                    (string.Empty, "IdMunicipio", "Nombre"), "Selecciona un municipio", new { @class = "form-control", @id = "ddlMunicipio", @onchange = "getColoniasByIdMunicipio(),  validarDDL(this, 'errorMunicipio')" })
+                    <span id="errorMunicipio" class="text-danger d-none">Opción no valida</span>
+                    <div class="text-danger">
+                        @Html.ValidationMessageFor(model => model.Direccion.Colonia.Municipio.IdMunicipio)
+                    </div>
+
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                @if (Model.IdUsuario > 0)
+                {
+                    <i class="bi bi-geo-alt-fill"></i>
+                    @Html.Label("Colonia", new { @class = "form-label" })
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.IdColonia, new SelectList
+                   (Model.Direccion.Colonia.Colonias, "IdColonia", "Nombre"), "Selecciona una colonia", new { @class = "form-control", @id = "ddlColonia", onchange = "validarDDL(this, 'errorColonia')" })
+                    //(string.Empty, "IdColonia", "Nombre"), "Selecciona una colonia", new { @class = "form-control", @id = "ddlColonia" })
+                    <span id="errorColonia" class="text-danger d-none">Opción no valida</span>
+                    <div class="text-danger">
+                        @Html.ValidationMessageFor(model => model.Direccion.Colonia.IdColonia)
+                    </div>
+
+                }
+                else
+                {
+                    @* @Html.LabelFor(model => model.Direccion.Colonia.IdColonia, new { @class = "form-label" })*@
+                    <i class="bi bi-geo-alt-fill"></i>
+                    @Html.Label("Colonia", new { @class = "form-label" })
+                    @Html.DropDownListFor(model => model.Direccion.Colonia.IdColonia, new SelectList
+                    (string.Empty, "IdColonia", "Nombre"), "Selecciona una colonia", new { @class = "form-control", @id = "ddlColonia", onchange = "validarDDL(this, 'errorColonia')" })
+                    <span id="errorColonia" class="text-danger d-none">Opción no valida</span>
+                    <div class="text-danger">
+                        @Html.ValidationMessageFor(model => model.Direccion.Colonia.IdColonia)
+                    </div>
+
+                }
+            </div>
+            <div class="col-lg-4 col-lg-offset-4 mx-auto">
+                <i class="bi bi-compass-fill"></i>
+                @Html.LabelFor(model => model.Direccion.Calle, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Direccion.Calle, new { id = "Calle", @class = "form-control", placeholder = "Ingrese su calle", @onkeypress = "soloTexto(event, this, 'errorCalle')" })
+                <span id="errorCalle" class="text-danger d-none">Caracter no permitido, solo letras</span>
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.Direccion.Calle)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                <i class="bi bi-2-square-fill"></i>
+                @Html.LabelFor(model => model.Direccion.NumeroInterior, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Direccion.NumeroInterior, new { id = "NumeroInterior", @class = "form-control", placeholder = "Ingrese su número interior", onkeypress = "soloNumeros(event, this, 'errorNumeroInterior')" })
+                <span id="errorNumeroInterior" class="text-danger d-none">Caracter no permitido, solo números</span>
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.Direccion.NumeroInterior)
+                </div>
+            </div>
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                <i class="bi bi-2-square-fill"></i>
+                @Html.LabelFor(model => model.Direccion.NumeroExterior, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Direccion.NumeroExterior, new { id = "NumeroExterior", @class = "form-control", placeholder = "Ingrese su número exterior", onkeypress = " soloNumeros(event, this, 'errorNumeroExterior')" })
+                <span id="errorNumeroExterior" class="text-danger d-none">Caracter no permitido, solo números</span>
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.Direccion.NumeroExterior)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <hr class="hrLinea"> IMAGEN <hr class="hrLinea">
+            </div>
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                <i class="bi bi-image-alt"></i>
+                @Html.LabelFor(model => model.Imagen, new { @class = "form-label" })
+                <input type="file" name="ImagenUsuario" id="ImagenUsuario" onchange="validarImagen(), visualizarImagen(this)" class="form-control" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+                <i class="bi bi-card-image"></i>
+                @Html.Label("Previsualización", new { @class = "form-label" })
+                @if (Model.Imagen != null && Model.Imagen.Length > 0)
+                {
+                    <br />
+                    <img style="width: 280px; height: 280px; " class="img-fluid img-thumbnail" id="img" src="data:image/*;base64,@Convert.ToBase64String(Model.Imagen)" />
+
+                }
+                else
+                {
+                    <br />
+
+                    <img style="width: 280px; height: 280px " name="ImagenUsuario" class="img-fluid img-thumbnail" src="~/Content/Imagenes/User_icon.png" id="img" />
+
+                }
+
+            </div>
+        </div>
+
+        <div class="text-center col-lg-4 col-lg-offset-4 mb-3 mx-auto">
+            <button type="submit" class="btn btn-outline-success " id="btnEnviar">ENVIAR</button>
+            @Html.ActionLink("REGRESAR", "GetAll", "Usuario", new { @class = "btn btn-outline-danger" })
+        </div>
+    </div>
+
+}
+
+
+@Scripts.Render("~/bundles/jquery")
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script>
+
+    jQuery.noConflict();
+    jQuery(function ($) {
+        $('#FechaNacimiento').datepicker({
+            dateFormat: "dd-mm-yy"
+        });
+    });
+
+    
+    function soloTexto(e, input, errorMsgId) {
+        var key = e.key
+        var regex = /[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@@\[\]\\\^\_\{\}\|\~]+/
+        var errorMsg = document.getElementById(errorMsgId)
+            if (!regex.test(key)) {
+                e.preventDefault()
+                document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-danger form-control";
+                errorMsg.classList.remove('d-none')
+                disableSubmitButton();
+            } else {
+                document.getElementById(input.id).className = document.getElementById(input.id).className.replace("border border-3 border-danger", "");
+                document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-success form-control";
+                errorMsg.classList.add('d-none')
+                enableSubmitButton()
+            }
+    }
+
+    function soloNumeros(e, input, errorMsgId) {
+        var key = e.key
+        var regex = /\d/
+        var errorMsg = document.getElementById(errorMsgId)
+        if (!regex.test(key)) {
+            e.preventDefault()
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-danger form-control"
+            errorMsg.classList.remove('d-none')
+            disableSubmitButton();
+        } else {
+            document.getElementById(input.id).className = document.getElementById(input.id).className.replace("border border-3 border-danger", "");
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-success form-control";
+            errorMsg.classList.add('d-none')
+            enableSubmitButton()
+        }
+
+
+    }
+
+    function validateEmail(e, input, errorMsgId) {
+        const email = input.value;
+        const regex = /([\w\.\-_]+)?\w+@@[\w-_]+(\.\w+){1,}/
+
+        var errorMsg = document.getElementById(errorMsgId)
+
+        if (!regex.test(email)) {
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-danger form-control";
+            errorMsg.classList.remove('d-none')
+            input.focus();
+            disableSubmitButton();
+
+        } else {
+            document.getElementById(input.id).className = document.getElementById(input.id).className.replace("border border-3 border-danger", "");
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-success form-control";
+            errorMsg.classList.add('d-none')
+            enableSubmitButton()
+
+        }
+
+    }
+
+    function validarNumeroInterior(input, errorMsgId) {
+        var numeroExterior = input.value
+        var regex = /^\d$/
+        var errorMsg = document.getElementById(errorMsgId)
+        if (!regex.test(numeroExterior)) {
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-danger form-control";
+            errorMsg.classList.remove('d-none')
+            disableSubmitButton();
+
+        } else {
+            document.getElementById(input.id).className = document.getElementById(input.id).className.replace("border border-3 border-danger", "");
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-success form-control";
+            errorMsg.classList.add('d-none')
+            enableSubmitButton()
+        }
+    }
+
+    function validarNumeroExterior(input, errorMsgId) {
+        var numeroExterior = input.value
+        var regex = /^[a-zA-Z0-9_.-]\d{0,4}$/
+        var errorMsg = document.getElementById(errorMsgId)
+
+        if (!regex.test(numeroExterior)) {
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-danger form-control";
+            errorMsg.classList.remove('d-none')
+            disableSubmitButton();
+        } else {
+            document.getElementById(input.id).className = document.getElementById(input.id).className.replace("border border-3 border-danger", "");
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-success form-control";
+            errorMsg.classList.add('d-none')
+            enableSubmitButton()
+
+        }
+    }
+
+    function validarUserName(e, input, errorMsgId) {
+        var UserName = input.value;
+        var errorMsg = document.getElementById(errorMsgId)
+        var regex = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/
+
+        if (!regex.test(UserName)) {
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-danger form-control";
+            errorMsg.classList.remove('d-none')
+            disableSubmitButton();
+
+        }else {
+            document.getElementById(input.id).className = document.getElementById(input.id).className.replace("border border-3 border-danger", "");
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-success form-control";
+            errorMsg.classList.add('d-none')
+            enableSubmitButton()
+
+        }
+
+    }
+
+    function validarTelefono(e, input, errorMsgId) {
+        const numero = input.value;
+        var regex = /(\+?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{3}\)?|\d{3})( |-|\.)?(\d{3}( |-|\.)?\d{4})/
+        var errorMsg = document.getElementById(errorMsgId)
+
+        if (!regex.test(numero)) {
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-danger form-control";
+            errorMsg.classList.remove('d-none')
+            disableSubmitButton();
+        } else {
+            document.getElementById(input.id).className = document.getElementById(input.id).className.replace("border border-3 border-danger", "");
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-success form-control";
+            errorMsg.classList.add('d-none')
+            enableSubmitButton()
+
+        }
+
+
+
+    }
+
+    function validarCURP(input, errorMsgId) {
+        var CURP = input.value
+        var regex = /^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/
+        var errorMsg = document.getElementById(errorMsgId)
+        if (!regex.test(CURP)) {
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-danger form-control";
+            errorMsg.classList.remove('d-none')
+            disableSubmitButton();
+
+        } else {
+            document.getElementById(input.id).className = document.getElementById(input.id).className.replace("border border-3 border-danger", "");
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-success form-control";
+            errorMsg.classList.add('d-none')
+            enableSubmitButton()
+        }
+
+
+
+    }
+
+    function validarDDL(input, errorMsgId) {
+
+        var errorMsg = document.getElementById(errorMsgId)
+        if (input.value === "") {
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-danger form-control";
+            errorMsg.classList.remove('d-none')
+            disableSubmitButton();
+        } else {
+            document.getElementById(input.id).className = document.getElementById(input.id).className.replace("border border-3 border-danger", "");
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-success form-control";
+            errorMsg.classList.add('d-none')
+            enableSubmitButton()
+        }
+
+    }
+
+    function validarFecha(input, errorMsgId) {
+        var errorMsg = document.getElementById(errorMsgId)
+        var today = new Date();
+        var regex = /^(((0[1-9]|[12][0-9]|3[01])[- /.](0[13578]|1[02])|(0[1-9]|[12][0-9]|30)[- /.](0[469]|11)|(0[1-9]|1\d|2[0-8])[- /.]02)[- /.]\d{4}|29[- /.]02[- /.](\d{2}(0[48]|[2468][048]|[13579][26])|([02468][048]|[1359][26])00))$/
+        today.setHours(0, 0, 0, 0);
+        if (input.value === "") {
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-danger form-control";
+            errorMsg.classList.remove('d-none')
+            disableSubmitButton();
+        } else {
+            var selectedDate = new Date(input.value);
+
+            if (selectedDate > today && input.value != regex) {
+                document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-danger form-control";
+                errorMsg.classList.remove('d-none')
+                disableSubmitButton();
+            } else {
+                document.getElementById(input.id).className = document.getElementById(input.id).className.replace("border border-3 border-danger", "");
+                document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-success form-control";
+                errorMsg.classList.add('d-none')
+                enableSubmitButton()
+            }
+        }
+
+    }
+
+    function validarPassword(input, errorMsgId) {
+        var password = input.value
+        var errorMsg = document.getElementById(errorMsgId)
+        var regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
+        if (!regex.test(password)) {
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-danger form-control";
+            errorMsg.classList.remove('d-none')
+            disableSubmitButton();
+
+        } else {
+            document.getElementById(input.id).className = document.getElementById(input.id).className.replace("border border-3 border-danger", "");
+            document.getElementById(input.id).className = document.getElementById(input.id).className + " border border-3 border-success form-control";
+            errorMsg.classList.add('d-none')
+            enableSubmitButton()
+        }
+    }
+
+    function disableSubmitButton() {
+        document.getElementById('btnEnviar').disableSubmitButton
+    }
+
+    function enableSubmitButton() {
+        const userName = document.getElementById('UserName');
+        const nombre = document.getElementById('Nombre');
+        const apellidoPaterno = document.getElementById('ApellidoPaterno');
+        const apellidoMaterno = document.getElementById('ApellidoMaterno');
+        const email = document.getElementById('Email');
+        const password = document.getElementById('Password');
+        const telefono = document.getElementById('Telefono');
+        const celular = document.getElementById('Celular');
+        const fechaNacimiento = document.getElementById('FechaNacimiento');
+        const curp = document.getElementById('CURP');
+        const rol = document.getElementById('Rol');
+        const estado = document.getElementById('ddlEstado');
+        const municipio = document.getElementById('ddlMunicipio');
+        const colonia = document.getElementById('ddlColonia');
+        const btnEnviar = document.getElementById('btnEnviar')
+
+            const isValid = userName.value && nombre.value && apellidoPaterno.value &&
+            apellidoMaterno.value && email.value &&
+            password.value && telefono.value &&
+            celular.value && fechaNacimiento.value && curp.value &&
+            rol.value && estado.value && municipio.value && colonia.value;
+
+        btnEnviar.disabled = !isValid;
+    }
+    
+
+    function getMunicipiosByIdEstado() {
+        var idEstado = $('#ddlEstado').val();
+        $.ajax({
+            'url': '@Url.Action("GetMunicipiosByIdEstado", "Usuario")',
+            'type': 'GET',
+            'dataType': 'JSON',
+            'data': { 'IdEstado': idEstado },
+            'success': function (result) {
+                if (result.Correct) {
+                    var ddlMunicipio = $('#ddlMunicipio');
+                    var ddlColonia = $('#ddlColonia');
+
+                    ddlColonia.empty();
+                    ddlColonia.append('<option value="">Selecciona una colonia</option>');
+
+                    ddlMunicipio.empty();
+                    ddlMunicipio.append('<option value="">Selecciona un municipio</option>');
+
+                    $.each(result.Objects, function (index, municipio) {
+                        ddlMunicipio.append('<option value ="' + municipio.IdMunicipio + '">' + municipio.Nombre + '</option>');
+
+                    });
+
+                }
+            },
+            'error': function (result) {
+                console.log(result.ErrorMessage)
+                    }
+            })
+        }
+
+    function getColoniasByIdMunicipio() {
+        var idMunicipio = $('#ddlMunicipio').val();
+    $.ajax({
+        'url': '@Url.Action("GetColoniasByIdMunicipio", "Usuario")',
+        'type': 'GET',
+        'dataType': 'JSON',
+        'data': {'IdMunicipio': idMunicipio },
+        'success': function (result) {
+            if (result.Correct) {
+                var ddlColonia = $('#ddlColonia');
+
+                ddlColonia.empty();
+                ddlColonia.append('<option value="">Selecciona una colonia</option>');
+
+                $.each(result.Objects, function (index, colonia) {
+                    ddlColonia.append('<option value ="' + colonia.IdColonia + '">' + colonia.Nombre + '</option>');
+
+                });
+
+            }
+        },
+        'error': function (result) {
+            console.log(result.ErrorMessage)
+                }
+        })
+    }
+
+    function validarImagen(){
+        var allowedExtension = ['jpeg', 'jpg', 'png'];
+        var fileExtension = document.getElementById('ImagenUsuario').value.split('.').pop().toLowerCase();
+
+        var isValidFile = false;
+        for (var index in allowedExtension) {
+            if (fileExtension == allowedExtension[index]) {
+                isValidFile = true;
+                break;
+            }
+        }
+        if (!isValidFile) {
+            alert('Las extensiones permitidas son: ' + allowedExtension.join(', .'));
+            document.getElementById('ImagenUsuario').value = "";
+        }
+        return isValidFile;
+    }
+
+    function visualizarImagen(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#img').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+
+</script>
